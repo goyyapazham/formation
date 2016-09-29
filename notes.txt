@@ -1,0 +1,37 @@
+09/30/2016
+
+Aim: Requesting assistance
+
+Do Now: Write an HTML file that contains a form with a single text box and
+   	a submit button.
+
+	Write a flask app where the root route renders the html form as a
+	template.
+
+09/29/2016
+
+Aim: Don't forget to include POSTage
+
+Do Now: Open up your form flask app from yesterday.
+
+    Request object
+    	
+        Stores information about incoming requests (any time your web server
+	is accessed)
+
+	Notable fields
+
+	    request.headers
+		HTML headers sent from the browser
+
+	    request.method
+		the request method (GET or POST)
+
+	    request.args
+		the arguments in a query string from a GET request
+
+	    request.form
+		the arguments sent in a POST request
+
+	    ** request.args and request.form are immutable dictionaries
+
