@@ -1,26 +1,49 @@
-from flask import Flask, render_template, request #new
+from flask import Flask, redirect, render_template, request
+from utils import account
+
+import hashlib
 
 app = Flask(__name__)
 
-usr = "u"
-pwd = "p"
-
 @app.route("/")
-@app.route("/login/") #can have multiple routes attached
-def run():
-    #print request.headers
+def home():
     return render_template("main.html")
 
+@app.route("/redirect/", methods = ['POST'])
+def redir():
+    try:
+        if request.form['login'] == "Submit":
+            return redirect("/authenticate/", code=307)
+    except Exception:
+        return redirect("/create/", code=307)
+    
 @app.route("/authenticate/", methods = ['POST'])
 def auth():
-    #print request.form
-    #print request.form['user']
-    if request.form['user'] == usr and request.form['pass'] == pwd:
-        resp = "!!! login successful"
+    L = account.get_file()
+    usr = hashlib.sha224(request.form['user']).hexdigest()
+    i = account.is_user(usr, L)
+    pwd = hashlib.sha224(request.form['pass']).hexdigest()
+    resp = ""
+    if i != -1:
+        if account.is_pass(pwd, i, L):
+            resp = "You have logged in successfully."
+        else:
+            resp = "Sorry, the password you submitted was incorrect."
+            
     else:
-        resp = "smh"
+        resp = "Sorry, the username you submitted does not exist."
     return render_template("response.html", response = resp)
-    
+
+@app.route("/create/", methods = ['POST'])
+def create():
+    L = account.get_file()
+    usr = hashlib.sha224(request.form['user']).hexdigest()
+    pwd = hashlib.sha224(request.form['pass']).hexdigest()
+    if account.is_user(usr, L):
+        return render_template("response.html", response = "Sorry, that username already exists.")
+    account.add_usr_pwd(usr, pwd)
+    return render_template("response.html", response = "Congratulations, your account has successfully been created!")
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
