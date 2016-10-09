@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <title>Homepage</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  </head>
+
+  <style>
+    body {
+    font-family: 'Open Sans';
+    font-size: 10pt;
+    padding: 50px;
+    text-align: center;
+    }
+  </style>
+
+  <body>
+    Welcome, {{username}}!<br><br>
+    <form action="/logout/" method="POST">
+      <input type="submit" name="logout" value="Logout">
+    </form>
+  </body>
+
+</html>
